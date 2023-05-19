@@ -1,7 +1,8 @@
 <style>
   .title{
     text-align: center;
-    
+    font-family: Arial, sans-serif;
+    font-weight: normal;
   }
   .container {
       text-align: center;
@@ -15,7 +16,7 @@
   }
 </style>
 <h1 class="title">
-  click play to generate a random 1 minute song
+  click play to generate a 1 minute song
 </h1>
 <div class="container">
   <button id="play" class="play">play</button>
@@ -23,48 +24,24 @@
 <script src="https://tonejs.github.io/build/Tone.js"></script>
 <script>
 /* global Tone */
-  // Create a new synth and connect it to the master output
 
-  function play (){
-  const synth = new Tone.Synth().toDestination();
-
-// Define an array of notes to choose from
-const notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4"];
-
-// Define the algorithm to generate the melody
-function generateMelody() {
-  // Create an empty melody array
-  const melody = [];
-
-  // Generate 8 random notes for the melody
-  for (let i = 0; i < 8; i++) {
-    // Choose a random note from the notes array
-    const randomNote = notes[Math.floor(Math.random() * notes.length)];
-
-    // Push the random note to the melody array
-    melody.push(randomNote);
+  const drum = new Tone.MembraneSynth().toDestination()
+  let isPlaying = false
+  
+  function play () {
+    if (isPlaying) {
+      return
+    }
+    isPlaying = true
+    Tone.Transport.scheduleRepeat((time) => {
+      drum.triggerAttackRelease('C2', '8n', time);
+    }, '4n')
   }
-
-  // Return the generated melody
-  return melody;
-}
-
-// Generate a melody
-const melody = generateMelody();
-
-// Play the melody
-Tone.Transport.scheduleRepeat((time) => {
-  // Get the current note from the melody
-  const note = melody[Tone.Transport.position % melody.length];
-
-  // Trigger the synth to play the note at the given time
-  synth.triggerAttackRelease(note, "8n", time);
-}, "8n");
-
-// Start the transport to begin playing the composition
-Tone.Transport.start();
-  }
+  const synth = new Tone.Synth().toDestination()
+	Tone.Transport.start()
+  
 
   const playbtn = document.querySelector('#play')
   playbtn.addEventListener('click', play)
+    
 </script>
