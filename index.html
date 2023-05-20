@@ -27,10 +27,11 @@
 /* global Tone */
 
   const playbtn = document.querySelector('#play')
-  let i=0
+  let i=1
   
-  const clips = {
-    quack: new Tone.Player('quack.mp3')
+  const audios = {
+    quack: new Tone.Player('quack.mp3'),
+    ribbit: new Tone.Player('ribbit.mp3').toDestination()
   }
   
   const drumNotes = ['C2', 'D2', 'E2', 'G2', 'B2', 'A2', 'F2']
@@ -74,7 +75,6 @@
     	clap() 
     } else {drumBeat()
     }
-    i++
   }
   
   function accent () {
@@ -106,6 +106,21 @@
     }
   }
   
+  const duckGain = new Tone.Gain(4)
+  
+  function quack () {
+    const bn = 1
+    let duck = Math.floor(Math.random() * 4) + 1
+    duckGain.disconnect()
+    duckGain.connect(Tone.Destination)
+    audios.quack.connect(duckGain)
+    const pitches = [6, 7, 4, 3, 1, 2, -1]
+    const randomPitch = pitches[Math.floor(Math.random() * pitches.length)]
+    const pitchedAudio = new Tone.PitchShift(randomPitch).toDestination()
+  	duckGain.connect(pitchedAudio)
+    if (bn === duck) audios.quack.start()
+  }
+  
   let isPlaying = false
   
   function btn () {
@@ -117,6 +132,7 @@
       Tone.Transport.cancel()
       Tone.Transport.scheduleRepeat(beat, '4n')
       Tone.Transport.scheduleRepeat(accent, '4n')
+      Tone.Transport.scheduleRepeat(quack, '2n')
     	playbtn.style.backgroundColor = '#ed374f'
     	playbtn.textContent = 'stop'
       Tone.Transport.start()
@@ -126,7 +142,7 @@
       playbtn.style.backgroundColor = '#69db73'
       playbtn.textContent = 'play'
       drum.triggerRelease()
-      i=0
+      i=1
   	}
   } 
   
