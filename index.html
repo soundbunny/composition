@@ -31,7 +31,7 @@
   
   const audios = {
     quack: new Tone.Player('quack.mp3'),
-    ribbit: new Tone.Player('ribbit.mp3').toDestination()
+    ribbit: new Tone.Player('ribbit.mp3')
   }
   
   const drumNotes = ['C2', 'D2', 'E2', 'G2', 'B2', 'A2', 'F2']
@@ -106,6 +106,7 @@
     }
   }
   
+  let isQuackPlaying = false
   const duckGain = new Tone.Gain(4)
   
   function quack () {
@@ -118,7 +119,25 @@
     const randomPitch = pitches[Math.floor(Math.random() * pitches.length)]
     const pitchedAudio = new Tone.PitchShift(randomPitch).toDestination()
   	duckGain.connect(pitchedAudio)
-    if (bn === duck) audios.quack.start()
+    if (bn === duck) {audios.quack.start()
+    	isQuackPlaying = true
+    } else {
+      isQuackPlaying = false
+    }
+  }
+  
+  const frogGain = new Tone.Gain (2)
+  
+  function ribbit () {
+		const bn = 1
+    let frog = Math.floor(Math.random() * 4) + 1
+    frogGain.disconnect()
+    frogGain.connect(Tone.Destination)
+    audios.quack.connect(frogGain)
+    if (isQuackPlaying) {
+      return
+    }
+    if (bn === frog) audios.ribbit.start()
   }
   
   let isPlaying = false
@@ -133,6 +152,7 @@
       Tone.Transport.scheduleRepeat(beat, '4n')
       Tone.Transport.scheduleRepeat(accent, '4n')
       Tone.Transport.scheduleRepeat(quack, '2n')
+      Tone.Transport.scheduleRepeat(ribbit, '2n')
     	playbtn.style.backgroundColor = '#ed374f'
     	playbtn.textContent = 'stop'
       Tone.Transport.start()
