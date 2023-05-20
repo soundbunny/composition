@@ -25,23 +25,27 @@
 <script>
 /* global Tone */
 
+  const playbtn = document.querySelector('#play')
   const drum = new Tone.MembraneSynth().toDestination()
   let isPlaying = false
   
-  function play () {
-    if (isPlaying) {
-      return
-    }
-    isPlaying = true
-    Tone.Transport.scheduleRepeat((time) => {
-      drum.triggerAttackRelease('C2', '8n', time);
-    }, '4n')
-  }
-  const synth = new Tone.Synth().toDestination()
-	Tone.Transport.start()
+  function btn () {
+    if (isPlaying === false) {
+    	isPlaying = true
+    	playbtn.style.backgroundColor = '#ed374f'
+    	playbtn.textContent = 'stop'
+      Tone.Transport.start()
+    	Tone.Transport.scheduleRepeat((time) => {
+      	drum.triggerAttackRelease('C2', '8n', time);
+    		}, '4n')
+  	} else {
+      isPlaying = false
+    	Tone.Transport.stop()
+      playbtn.style.backgroundColor = '#69db73'
+      playbtn.textContent = 'play'
+  	}
+  } 
   
-
-  const playbtn = document.querySelector('#play')
-  playbtn.addEventListener('click', play)
+  playbtn.addEventListener('click', btn)
     
 </script>
