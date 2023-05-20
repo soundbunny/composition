@@ -1,3 +1,4 @@
+<!-- work in progress, would love feedback if possible -->
 <style>
   .title{
     text-align: center;
@@ -70,7 +71,36 @@
     }
     i++
   }
-   
+  
+  function accent () {
+    const bn = (i % 4) + 1
+    let accentBeat = Math.floor(Math.random() * 4) + 1
+    if (bn === accentBeat) {
+    const synth = new Tone.Synth().toDestination();
+    const frequency = Math.random() * (2000 - 1200 + 1) + 1200;
+    const noteLength = ['2n', '4n', '8n', '16n'];
+    const randomIndex = Math.floor(Math.random() * noteLength.length);
+    let vibratoDepth, vibratoFrequency;
+      let selectedNoteLength = noteLength[randomIndex];
+  			if (selectedNoteLength === '2n') {
+          vibratoDepth = 4;
+          vibratoFrequency = 0.2;
+      } else if (selectedNoteLength === '4n') {
+          vibratoDepth = 3;
+          vibratoFrequency = 0.3;
+  		} else if (selectedNoteLength === '8n') {
+        vibratoDepth = 2;
+        vibratoFrequency = 0.4;
+  		} else {
+        vibratoDepth = 1;
+        vibratoFrequency = 0.7
+      }
+  		const vibrato = new Tone.Vibrato(vibratoDepth, vibratoFrequency).toDestination();
+  		synth.connect(vibrato)
+      synth.triggerAttackRelease(frequency, noteLength[randomIndex])
+    }
+  }
+  
   let isPlaying = false
   
   function btn () {
@@ -80,6 +110,7 @@
       Tone.Transport.timeSignature = [4, 4]
       Tone.Transport.cancel()
       Tone.Transport.scheduleRepeat(beat, '4n')
+      Tone.Transport.scheduleRepeat(accent, '4n')
     	playbtn.style.backgroundColor = '#ed374f'
     	playbtn.textContent = 'stop'
       Tone.Transport.start()
