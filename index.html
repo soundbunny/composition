@@ -28,11 +28,7 @@
 
   const playbtn = document.querySelector('#play')
   let i=0
-  
-  /*const drum1 = new Tone.MembraneSynth().toDestination()
-  function drumDownbeat() {
-    drum1.triggerAttackRelease('C2', '8n')
-  }*/
+  //clap written with chatgpt help
   function clap() {
   	const noiseSynth = new Tone.NoiseSynth({
     	volume: -10,
@@ -48,7 +44,7 @@
   	noiseSynth.triggerAttackRelease("8n")
   	noise.start().stop("+0.1")
     const drum = new Tone.MembraneSynth().toDestination()
-    	drum.triggerAttackRelease('C2', '8n')
+    drum.triggerAttackRelease('C2', '8n')
 	}
   
   const drum = new Tone.MembraneSynth().toDestination()
@@ -58,9 +54,9 @@
   
   function beat (){
     const bn = (i % 8) + 1
-    let clapBeats = [];
+    let clapBeats = [] //loop written with chatgpt help
   	while (clapBeats.length < 3) {
-    	const beatNum = Math.floor(Math.random() * 8) + 1;
+    	const beatNum = Math.floor(Math.random() * 8) + 1
     	if (!clapBeats.includes(beatNum)) {
       	clapBeats.push(beatNum);
     	}
@@ -75,7 +71,7 @@
   function accent () {
     const bn = (i % 4) + 1
     let accentBeat = Math.floor(Math.random() * 4) + 1
-    if (bn === accentBeat) {
+    if (bn === accentBeat) { //modified from h2 function in instrument
     const synth = new Tone.Synth().toDestination();
     const frequency = Math.random() * (2000 - 1200 + 1) + 1200;
     const noteLength = ['2n', '4n', '8n', '16n'];
@@ -106,6 +102,7 @@
   function btn () {
     if (isPlaying === false) {
       isPlaying = true
+      //flowwing 5 lines adapted from drum sampler example
       Tone.Transport.bpm.value = 160
       Tone.Transport.timeSignature = [4, 4]
       Tone.Transport.cancel()
