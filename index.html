@@ -45,21 +45,30 @@
 
   	const noise = new Tone.Noise("brown")
   	noiseSynth.triggerAttackRelease("8n")
-  	noise.start().stop("+0.1");
+  	noise.start().stop("+0.1")
+    const drum = new Tone.MembraneSynth().toDestination()
+    	drum.triggerAttackRelease('C2', '8n')
 	}
   
-  const drum2 = new Tone.MembraneSynth().toDestination()
+  const drum = new Tone.MembraneSynth().toDestination()
   function drumBeat() {
-    drum2.triggerAttackRelease('C2', '8n');
+    drum.triggerAttackRelease('C2', '8n');
   }
   
   function beat (){
     const bn = (i % 8) + 1
-    if (bn === 1 || bn === 7) clap()
-    drumBeat()
+    let b1, b2, b3
+  	do {
+    	b1 = Math.floor(Math.random() * 8) + 1
+    	b2 = Math.floor(Math.random() * 8) + 1
+    	b3 = Math.floor(Math.random() * 8) + 1
+  	} while (b1 === b2 || b1 === b3 || b2 === b3)
+  	if (bn === b1 || bn === b1 || bn === b3) { clap() 
+    } else {drumBeat()
+    }
     i++
   }
-  
+   
   let isPlaying = false
   
   function btn () {
@@ -67,6 +76,7 @@
       isPlaying = true
       Tone.Transport.bpm.value = 160
       Tone.Transport.timeSignature = [4, 4]
+      Tone.Transport.cancel()
       Tone.Transport.scheduleRepeat(beat, '4n')
     	playbtn.style.backgroundColor = '#ed374f'
     	playbtn.textContent = 'stop'
@@ -76,8 +86,7 @@
     	Tone.Transport.stop()
       playbtn.style.backgroundColor = '#69db73'
       playbtn.textContent = 'play'
-      //drum1.triggerRelease()
-      drum2.triggerRelease()
+      drum.triggerRelease()
       i=0
   	}
   } 
