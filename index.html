@@ -133,7 +133,7 @@
     let frog = Math.floor(Math.random() * 4) + 1
     frogGain.disconnect()
     frogGain.connect(Tone.Destination)
-    audios.quack.connect(frogGain)
+    audios.ribbit.connect(frogGain)
     if (isQuackPlaying) {
       return
     }
