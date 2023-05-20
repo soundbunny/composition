@@ -16,7 +16,7 @@
   }
 </style>
 <h1 class="title">
-  click play to generate a 1 minute song
+  click play to generate a musical composition
 </h1>
 <div class="container">
   <button id="play" class="play">play</button>
@@ -26,24 +26,59 @@
 /* global Tone */
 
   const playbtn = document.querySelector('#play')
-  const drum = new Tone.MembraneSynth().toDestination()
+  let i=0
+  
+  /*const drum1 = new Tone.MembraneSynth().toDestination()
+  function drumDownbeat() {
+    drum1.triggerAttackRelease('C2', '8n')
+  }*/
+  function clap() {
+  	const noiseSynth = new Tone.NoiseSynth({
+    	volume: -10,
+    	envelope: {
+      	attack: 0.001,
+      	decay: 0.1,
+      	sustain: 0,
+      	release: 0.1,
+    	},
+  	}).toDestination()
+
+  	const noise = new Tone.Noise("brown")
+  	noiseSynth.triggerAttackRelease("8n")
+  	noise.start().stop("+0.1");
+	}
+  
+  const drum2 = new Tone.MembraneSynth().toDestination()
+  function drumBeat() {
+    drum2.triggerAttackRelease('C2', '8n');
+  }
+  
+  function beat (){
+    const bn = (i % 8) + 1
+    if (bn === 1 || bn === 7) clap()
+    drumBeat()
+    i++
+  }
+  
   let isPlaying = false
   
   function btn () {
     if (isPlaying === false) {
-    	isPlaying = true
+      isPlaying = true
+      Tone.Transport.bpm.value = 160
+      Tone.Transport.timeSignature = [4, 4]
+      Tone.Transport.scheduleRepeat(beat, '4n')
     	playbtn.style.backgroundColor = '#ed374f'
     	playbtn.textContent = 'stop'
       Tone.Transport.start()
-    	Tone.Transport.scheduleRepeat((time) => {
-      	drum.triggerAttackRelease('C2', '8n', time);
-    		}, '4n')
   	} else {
       isPlaying = false
     	Tone.Transport.stop()
       playbtn.style.backgroundColor = '#69db73'
       playbtn.textContent = 'play'
-      drum.triggerRelease()
+      //drum1.triggerRelease()
+      drum2.triggerRelease()
+      i=0
   	}
   } 
   
