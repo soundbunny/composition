@@ -28,6 +28,12 @@
 
   const playbtn = document.querySelector('#play')
   let i=0
+  
+  const clips = {
+    quack: new Tone.Player('quack.mp3')
+  }
+  
+  const drumNotes = ['C2', 'D2', 'E2', 'G2', 'B2', 'A2', 'F2']
   //clap written with chatgpt help
   function clap() {
   	const noiseSynth = new Tone.NoiseSynth({
@@ -39,17 +45,20 @@
       	release: 0.1,
     	},
   	}).toDestination()
-
-  	const noise = new Tone.Noise("brown")
-  	noiseSynth.triggerAttackRelease("8n")
-  	noise.start().stop("+0.1")
+		const noiseTypes = ['brown', 'pink', 'white']
+    const randomNoise = noiseTypes[Math.floor(Math.random() * noiseTypes.length)]
+  	const noise = new Tone.Noise(randomNoise)
+  	noiseSynth.triggerAttackRelease('8n')
+  	noise.start().stop('+0.1')
     const drum = new Tone.MembraneSynth().toDestination()
-    drum.triggerAttackRelease('C2', '8n')
+    const randomNote = drumNotes[Math.floor(Math.random() * drumNotes.length)]
+    drum.triggerAttackRelease(randomNote, '8n')
 	}
   
   const drum = new Tone.MembraneSynth().toDestination()
   function drumBeat() {
-    drum.triggerAttackRelease('C2', '8n');
+    const randomNote = drumNotes[Math.floor(Math.random() * drumNotes.length)]
+    drum.triggerAttackRelease(randomNote, '8n');
   }
   
   function beat (){
