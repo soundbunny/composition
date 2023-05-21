@@ -31,7 +31,8 @@
   
   const audios = {
     quack: new Tone.Player('quack.mp3'),
-    ribbit: new Tone.Player('ribbit.mp3')
+    ribbit: new Tone.Player('ribbit.mp3'),
+    quesdrum: new Tone.Player('quesdrum.mp3')
   }
   
   const drumNotes = ['C2', 'D2', 'E2', 'G2', 'B2', 'A2', 'F2']
@@ -140,6 +141,16 @@
     if (bn === frog) audios.ribbit.start()
   }
   
+  const quesdrumGain = new Tone.Gain (3)
+  function quesdrum () {
+		const bn = 1
+    let ques = Math.floor(Math.random() * 4) + 1
+    quesdrumGain.disconnect()
+    quesdrumGain.connect(Tone.Destination)
+    audios.quesdrum.connect(quesdrumGain)
+    if (bn === ques) audios.quesdrum.start()
+  }
+  
   let isPlaying = false
   
   function btn () {
@@ -153,6 +164,7 @@
       Tone.Transport.scheduleRepeat(accent, '4n')
       Tone.Transport.scheduleRepeat(quack, '2n')
       Tone.Transport.scheduleRepeat(ribbit, '2n')
+      Tone.Transport.scheduleRepeat(quesdrum, '2n')
     	playbtn.style.backgroundColor = '#ed374f'
     	playbtn.textContent = 'stop'
       Tone.Transport.start()
