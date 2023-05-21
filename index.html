@@ -240,6 +240,7 @@
   	} else {
       isPlaying = false
     	Tone.Transport.stop()
+      Tone.Transport.cancel()
       playbtn.style.backgroundColor = '#69db73'
       playbtn.textContent = 'play'
       drum.triggerRelease()
