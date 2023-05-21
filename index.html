@@ -6,7 +6,7 @@
     font-weight: normal;
   }
   .container {
-      text-align: center;
+    text-align: center;
     }
   .play {
     width: 80px;
@@ -32,7 +32,6 @@
   const audios = {
     quack: new Tone.Player('quack.mp3'),
     ribbit: new Tone.Player('ribbit.mp3'),
-    quesdrum: new Tone.Player('qdrum.mp3'),
     lab: new Tone.Player('lab.mp3')
   }
   
@@ -40,7 +39,7 @@
   let isClapPlaying = false
   //clap written with chatgpt help
   function clap() {
-    isClapPlaying = false
+    isClapPlaying = true
   	const noiseSynth = new Tone.NoiseSynth({
     	volume: -10,
     	envelope: {
@@ -58,7 +57,7 @@
     const drum = new Tone.MembraneSynth().toDestination()
     const randomNote = drumNotes[Math.floor(Math.random() * drumNotes.length)]
     drum.triggerAttackRelease(randomNote, '8n')
-    isClapPlaying = true
+    isClapPlaying = false
 	}
   
   const drum = new Tone.MembraneSynth({
@@ -96,7 +95,7 @@
     let accentBeat = Math.floor(Math.random() * 3) + 1
     if (bn === accentBeat) { //modified from h2 function in instrument
     const synth = new Tone.Synth().toDestination();
-    const frequency = Math.random() * (2000 - 1100 + 1) + 1100;
+    const frequency = Math.random() * (1800 - 800 + 1) + 800;
     const noteLength = ['1n', '2n', '4n', '8n', '16n', '32n'];
     const randomIndex = Math.floor(Math.random() * noteLength.length);
     let vibratoDepth, vibratoFrequency;
@@ -195,7 +194,6 @@
       Tone.Transport.cancel()
       Tone.Transport.scheduleRepeat(beat, '4n')
       Tone.Transport.scheduleRepeat(accent, '4n')
-      Tone.Transport.scheduleRepeat
       Tone.Transport.scheduleRepeat(() => {
         if (i > 4 && !isRibbitPlaying && !isLabPlaying) {
           quack()
