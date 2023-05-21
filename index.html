@@ -76,7 +76,7 @@
   }
   
   function beat (){
-    const bn = (i % 8) + 1
+    const bn = (i % 8) + 1 //adapted from drum sampler example
     let clapBeats = [] //loop written with chatgpt help
   	while (clapBeats.length < 3) {
     	const beatNum = Math.floor(Math.random() * 8) + 1
@@ -93,7 +93,7 @@
   function accent () {
     const bn = (i % 3) + 1
     let accentBeat = Math.floor(Math.random() * 3) + 1
-    if (bn === accentBeat) { //modified from h2 function in instrument
+    if (bn === accentBeat) { //modified from h1-3 functions in instrument
     const synth = new Tone.Synth().toDestination();
     const frequency = Math.random() * (1800 - 800 + 1) + 800;
     const noteLength = ['1n', '2n', '4n', '8n', '16n', '32n'];
@@ -135,7 +135,7 @@
     duckGain.disconnect()
     duckGain.connect(Tone.Destination)
     audios.quack.connect(duckGain)
-    const pitches = [6, 7, 4, 3, 1, 2, -1]
+    const pitches = [6, 7, 4, 3, 1, 2, -1] //pitch shift coded with chat gpt help
     const randomPitch = pitches[Math.floor(Math.random() * pitches.length)]
     const pitchedAudio = new Tone.PitchShift(randomPitch).toDestination()
   	duckGain.connect(pitchedAudio)
@@ -155,9 +155,6 @@
     frogGain.disconnect()
     frogGain.connect(Tone.Destination)
     audios.ribbit.connect(frogGain)
-    /*if (isQuackPlaying) {
-      return
-    }*/
     if (bn === frog) {
       audios.ribbit.start()
         isRibbitPlaying = true
@@ -194,6 +191,7 @@
       Tone.Transport.timeSignature = [4, 4]
       Tone.Transport.scheduleRepeat(beat, '4n')
       Tone.Transport.scheduleRepeat(accent, '4n')
+      //conditional Tone.Transport below coded with chatgpt help
       Tone.Transport.scheduleRepeat(() => {
         if (i > 4 && !isRibbitPlaying && !isLabPlaying) {
           quack()
