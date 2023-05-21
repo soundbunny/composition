@@ -32,12 +32,15 @@
   const audios = {
     quack: new Tone.Player('quack.mp3'),
     ribbit: new Tone.Player('ribbit.mp3'),
-    quesdrum: new Tone.Player('quesdrum.mp3')
+    quesdrum: new Tone.Player('qdrum.mp3'),
+    lab: new Tone.Player('lab.mp3')
   }
   
   const drumNotes = ['C2', 'D2', 'E2', 'G2', 'B2', 'A2', 'F2']
+  let isClapPlaying = false
   //clap written with chatgpt help
   function clap() {
+    isClapPlaying = false
   	const noiseSynth = new Tone.NoiseSynth({
     	volume: -10,
     	envelope: {
@@ -55,9 +58,19 @@
     const drum = new Tone.MembraneSynth().toDestination()
     const randomNote = drumNotes[Math.floor(Math.random() * drumNotes.length)]
     drum.triggerAttackRelease(randomNote, '8n')
+    isClapPlaying = true
 	}
   
-  const drum = new Tone.MembraneSynth().toDestination()
+  const drum = new Tone.MembraneSynth({
+    pitchDecay: 0.02,
+    envelope: {
+      attack: 0.001, 
+      decay: 0.5,
+      sustain: 0, 
+      release: 0.1, 
+    },
+  }).toDestination()
+  
   function drumBeat() {
     const randomNote = drumNotes[Math.floor(Math.random() * drumNotes.length)]
     drum.triggerAttackRelease(randomNote, '8n');
@@ -79,32 +92,39 @@
   }
   
   function accent () {
-    const bn = (i % 4) + 1
-    let accentBeat = Math.floor(Math.random() * 4) + 1
+    const bn = (i % 3) + 1
+    let accentBeat = Math.floor(Math.random() * 3) + 1
     if (bn === accentBeat) { //modified from h2 function in instrument
     const synth = new Tone.Synth().toDestination();
-    const frequency = Math.random() * (2000 - 1200 + 1) + 1200;
-    const noteLength = ['2n', '4n', '8n', '16n'];
+    const frequency = Math.random() * (2000 - 1100 + 1) + 1100;
+    const noteLength = ['1n', '2n', '4n', '8n', '16n', '32n'];
     const randomIndex = Math.floor(Math.random() * noteLength.length);
     let vibratoDepth, vibratoFrequency;
-      let selectedNoteLength = noteLength[randomIndex];
-  			if (selectedNoteLength === '2n') {
-          vibratoDepth = 4;
-          vibratoFrequency = 0.2;
+    let selectedNoteLength = noteLength[randomIndex]
+  		if (selectedNoteLength === '1n') {
+          vibratoDepth = 5
+        	vibratoFrequency = 0.1
+      } else if (selectedNoteLength === '2n') {
+          vibratoDepth = 4
+          vibratoFrequency = 0.2
       } else if (selectedNoteLength === '4n') {
-          vibratoDepth = 3;
-          vibratoFrequency = 0.3;
+          vibratoDepth = 3
+          vibratoFrequency = 0.3
   		} else if (selectedNoteLength === '8n') {
-        vibratoDepth = 2;
-        vibratoFrequency = 0.4;
-  		} else {
-        vibratoDepth = 1;
+        vibratoDepth = 2
+        vibratoFrequency = 0.4
+  		} else if (selectedNoteLength === '16n') {
+        vibratoDepth = 1
+        vibratoFrequency = 0.6
+      } else {
+        vibratoDepth = 0.5
         vibratoFrequency = 0.7
       }
   		const vibrato = new Tone.Vibrato(vibratoDepth, vibratoFrequency).toDestination();
   		synth.connect(vibrato)
       synth.triggerAttackRelease(frequency, noteLength[randomIndex])
     }
+    i++
   }
   
   let isQuackPlaying = false
@@ -112,7 +132,7 @@
   
   function quack () {
     const bn = 1
-    let duck = Math.floor(Math.random() * 4) + 1
+    let duck = Math.floor(Math.random() * 2) + 1
     duckGain.disconnect()
     duckGain.connect(Tone.Destination)
     audios.quack.connect(duckGain)
@@ -128,27 +148,40 @@
   }
   
   const frogGain = new Tone.Gain (2)
+  let isRibbitPlaying = false
   
   function ribbit () {
 		const bn = 1
-    let frog = Math.floor(Math.random() * 4) + 1
+    let frog = Math.floor(Math.random() * 2) + 1
     frogGain.disconnect()
     frogGain.connect(Tone.Destination)
     audios.ribbit.connect(frogGain)
-    if (isQuackPlaying) {
+    /*if (isQuackPlaying) {
       return
+    }*/
+    if (bn === frog) {
+      audios.ribbit.start()
+        isRibbitPlaying = true
+    } else {
+      isRibbitPlaying = false
     }
-    if (bn === frog) audios.ribbit.start()
   }
   
-  const quesdrumGain = new Tone.Gain (3)
-  function quesdrum () {
+  let isLabPlaying = false
+  const labGain = new Tone.Gain (1.5)
+  
+  function lab () {
 		const bn = 1
-    let ques = Math.floor(Math.random() * 4) + 1
-    quesdrumGain.disconnect()
-    quesdrumGain.connect(Tone.Destination)
-    audios.quesdrum.connect(quesdrumGain)
-    if (bn === ques) audios.quesdrum.start()
+    let lab = Math.floor(Math.random() * 2) + 1
+  	labGain.disconnect()
+    labGain.connect(Tone.Destination)
+    audios.lab.connect(labGain)
+    if (bn === lab) {
+      audios.lab.start()
+      isLabPlaying = true
+    } else {
+      isLabPlaying = false
+    }
   }
   
   let isPlaying = false
@@ -156,15 +189,28 @@
   function btn () {
     if (isPlaying === false) {
       isPlaying = true
-      //flowwing 5 lines adapted from drum sampler example
+      //following 5 lines adapted from drum sampler example
       Tone.Transport.bpm.value = 160
       Tone.Transport.timeSignature = [4, 4]
       Tone.Transport.cancel()
       Tone.Transport.scheduleRepeat(beat, '4n')
       Tone.Transport.scheduleRepeat(accent, '4n')
-      Tone.Transport.scheduleRepeat(quack, '2n')
-      Tone.Transport.scheduleRepeat(ribbit, '2n')
-      Tone.Transport.scheduleRepeat(quesdrum, '2n')
+      Tone.Transport.scheduleRepeat
+      Tone.Transport.scheduleRepeat(() => {
+        if (i > 4 && !isRibbitPlaying && !isLabPlaying) {
+          quack()
+        }
+      }, '4n' + '16n')
+      Tone.Transport.scheduleRepeat(() => {
+        if (i > 4 && !isQuackPlaying && !isLabPlaying) {
+          ribbit()
+        }
+      }, '4n' + '8n')
+      Tone.Transport.scheduleRepeat(() => {
+        if (i > 4 && !isQuackPlaying && !isRibbitPlaying) {
+          lab()
+        }
+      }, '2n')
     	playbtn.style.backgroundColor = '#ed374f'
     	playbtn.textContent = 'stop'
       Tone.Transport.start()
