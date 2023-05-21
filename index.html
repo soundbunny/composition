@@ -171,7 +171,7 @@
   
   function lab () {
 		const bn = 1
-    let lab = Math.floor(Math.random() * 2) + 1
+    let lab = Math.floor(Math.random() * 4) + 1
   	labGain.disconnect()
     labGain.connect(Tone.Destination)
     audios.lab.connect(labGain)
@@ -198,12 +198,12 @@
         if (i > 4 && !isRibbitPlaying && !isLabPlaying) {
           quack()
         }
-      }, '4n' + '16n')
+      }, '4n' +' 32n')
       Tone.Transport.scheduleRepeat(() => {
         if (i > 4 && !isQuackPlaying && !isLabPlaying) {
           ribbit()
         }
-      }, '4n' + '8n')
+      }, '4n' + '32n')
       Tone.Transport.scheduleRepeat(() => {
         if (i > 4 && !isQuackPlaying && !isRibbitPlaying) {
           lab()
