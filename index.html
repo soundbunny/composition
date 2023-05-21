@@ -102,10 +102,10 @@
     const bn = (i % 2) + 1
     let accentBeat = Math.floor(Math.random() * 2) + 1
     if (bn === accentBeat) { //modified from h1-3 functions in instrument
-    const synth = new Tone.AMSynth().toDestination();
-    const frequency = Math.random() * (1800 - 800 + 1) + 800;
-    const noteLength = ['1n', '2n', '4n', '8n', '16n', '32n'];
-    const randomIndex = Math.floor(Math.random() * noteLength.length);
+    const synth = new Tone.AMSynth().toDestination()
+    const frequency = Math.random() * (1800 - 800 + 1) + 800
+    const noteLength = ['1n', '2n', '4n', '8n', '16n', '32n']
+    const randomIndex = Math.floor(Math.random() * noteLength.length)
     let vibratoDepth, vibratoFrequency;
     let selectedNoteLength = noteLength[randomIndex]
   		if (selectedNoteLength === '1n') {
@@ -131,7 +131,25 @@
   		synth.connect(vibrato)
       synth.triggerAttackRelease(frequency, noteLength[randomIndex])
     }
-    i++
+  }
+  
+  function chord() {
+    if (measures < 1) {
+      return;
+    }
+
+    const bn = (i % 2) + 1;
+    const chordBeat = Math.floor(Math.random() * 2) + 1;
+
+    if (bn === chordBeat) {
+      const synth = new Tone.PolySynth().toDestination();
+      const frequencies = [Math.random() * (1200 - 400 + 1) + 400];
+      const noteLengths = ['1n', '2n', '4n', '8n', '16n', '32n'];
+      const randomIndex = Math.floor(Math.random() * noteLengths.length);
+      const selectedNoteLength = noteLengths[randomIndex];
+
+      synth.triggerAttackRelease(frequencies, selectedNoteLength);
+    }
   }
   
   let isQuackPlaying = false
@@ -199,6 +217,7 @@
       Tone.Transport.timeSignature = [4, 4]
       Tone.Transport.scheduleRepeat(beat, '4n')
       Tone.Transport.scheduleRepeat(accent, '4n')
+      Tone.Transport.scheduleRepeat(chord, '4n')
       //conditional Tone.Transport below coded with chatgpt help
       Tone.Transport.scheduleRepeat(() => {
         if (i > 4 && !isRibbitPlaying && !isLabPlaying) {
