@@ -28,6 +28,7 @@
 
   const playbtn = document.querySelector('#play')
   let i=1
+  let measures = 0
   
   const audios = {
     quack: new Tone.Player('quack.mp3'),
@@ -77,24 +78,31 @@
   
   function beat (){
     const bn = (i % 8) + 1 //adapted from drum sampler example
+    if (bn === 1) {
+      measures++;
+    }
     let clapBeats = [] //loop written with chatgpt help
   	while (clapBeats.length < 3) {
     	const beatNum = Math.floor(Math.random() * 8) + 1
     	if (!clapBeats.includes(beatNum)) {
-      	clapBeats.push(beatNum);
+      	clapBeats.push(beatNum)
     	}
   	}
   	if (clapBeats.includes(bn)) {
     	clap() 
     } else {drumBeat()
     }
+    i++
   }
   
   function accent () {
-    const bn = (i % 3) + 1
-    let accentBeat = Math.floor(Math.random() * 3) + 1
+    if (measures < 1) {
+      return
+    }
+    const bn = (i % 2) + 1
+    let accentBeat = Math.floor(Math.random() * 2) + 1
     if (bn === accentBeat) { //modified from h1-3 functions in instrument
-    const synth = new Tone.Synth().toDestination();
+    const synth = new Tone.AMSynth().toDestination();
     const frequency = Math.random() * (1800 - 800 + 1) + 800;
     const noteLength = ['1n', '2n', '4n', '8n', '16n', '32n'];
     const randomIndex = Math.floor(Math.random() * noteLength.length);
