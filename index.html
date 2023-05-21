@@ -192,7 +192,6 @@
       //following 5 lines adapted from drum sampler example
       Tone.Transport.bpm.value = 160
       Tone.Transport.timeSignature = [4, 4]
-      Tone.Transport.cancel()
       Tone.Transport.scheduleRepeat(beat, '4n')
       Tone.Transport.scheduleRepeat(accent, '4n')
       Tone.Transport.scheduleRepeat(() => {
