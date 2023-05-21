@@ -187,6 +187,7 @@
   
   function btn () {
     if (isPlaying === false) {
+      Tone.start()
       isPlaying = true
       //following 5 lines adapted from drum sampler example
       Tone.Transport.bpm.value = 160
