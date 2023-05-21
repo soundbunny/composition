@@ -73,7 +73,7 @@
   
   function drumBeat() {
     const randomNote = drumNotes[Math.floor(Math.random() * drumNotes.length)]
-    drum.triggerAttackRelease(randomNote, '8n');
+    drum.triggerAttackRelease(randomNote, '8n')
   }
   
   function beat (){
@@ -135,20 +135,17 @@
   
   function chord() {
     if (measures < 1) {
-      return;
+      return
     }
-
-    const bn = (i % 2) + 1;
-    const chordBeat = Math.floor(Math.random() * 2) + 1;
-
+    const bn = (i % 2) + 1
+    const chordBeat = Math.floor(Math.random() * 2) + 1
     if (bn === chordBeat) {
-      const synth = new Tone.PolySynth().toDestination();
-      const frequencies = [Math.random() * (1200 - 400 + 1) + 400];
-      const noteLengths = ['1n', '2n', '4n', '8n', '16n', '32n'];
-      const randomIndex = Math.floor(Math.random() * noteLengths.length);
-      const selectedNoteLength = noteLengths[randomIndex];
-
-      synth.triggerAttackRelease(frequencies, selectedNoteLength);
+      const synth = new Tone.PolySynth().toDestination()
+      const frequencies = [Math.random() * (1200 - 400 + 1) + 400]
+      const noteLengths = ['1n', '2n', '4n', '8n']
+      const randomIndex = Math.floor(Math.random() * noteLengths.length)
+      const selectedNoteLength = noteLengths[randomIndex]
+      synth.triggerAttackRelease(frequencies, selectedNoteLength)
     }
   }
   
